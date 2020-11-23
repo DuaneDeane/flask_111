@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf8 -*-
+""" Simple database operations """
+
 from flask import g
 import sqlite3
 
@@ -49,7 +53,7 @@ def update(prod_id, fields: dict):
             WHERE id = ?
             """ % field_string
     cursor = get_db()
-    cursor.execute(query, (prod_id))
+    cursor.execute(query, (prod_id,))
     cursor.commit()
     return True
 
