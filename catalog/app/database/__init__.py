@@ -5,13 +5,15 @@
 from flask import g
 import sqlite3
 
-DATABASE="catalog_db"
+DATABASE = "catalog_db"
+
 
 def get_db():
     db = getattr(g, "_database", None)
     if not db:
         db = g._database = sqlite3.connect(DATABASE)
     return db
+
 
 def output_formatter(results: tuple):
     out = {"body": []}
@@ -24,11 +26,13 @@ def output_formatter(results: tuple):
         out["body"].append(res_dict)
     return out
 
+
 def scan():
     cursor = get_db().execute("SELECT * FROM product", ())
     results = cursor.fetchall()
     cursor.close()
     return output_formatter(results)
+
 
 def read(prod_id):
     query = """
@@ -36,17 +40,18 @@ def read(prod_id):
         FROM product
         WHERE id = ?
         """
-    
+
     cursor = get_db().execute(query, (prod_id,))
     results = cursor.fetchall()
     cursor.close()
     return output_formatter(results)
 
+
 def update(prod_id, fields: dict):
     field_string = ", ".join(
-                    "%s=\"%s\"" % (key, val)
-                        for key, val
-                        in fields.items())
+        "%s=\"%s\"" % (key, val)
+        for key, val
+        in fields.items())
     query = """
             UPDATE product
             SET %s
@@ -56,6 +61,7 @@ def update(prod_id, fields: dict):
     cursor.execute(query, (prod_id,))
     cursor.commit()
     return True
+
 
 def create(name, price, category, description):
     value_tuple = (name, price, category, description)
@@ -71,6 +77,7 @@ def create(name, price, category, description):
     last_row_id = cursor.execute(query, value_tuple).lastrowid
     cursor.commit()
     return last_row_id
+
 
 def delete(prod_id):
     query = "DELETE FROM product WHERE id=%s" % prod_id

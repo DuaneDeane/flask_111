@@ -1,4 +1,4 @@
-#!/Users/lilboom/Desktop/SDGKU/flask_111/catalog/venv/bin/python3.9
+#!/Users/lilboom/Desktop/SDGKU/flask_111/catalog/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

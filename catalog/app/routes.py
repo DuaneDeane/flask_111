@@ -2,10 +2,11 @@
 # -*- coding: utf8 -*-
 """ HTTP route definitions """
 
-from flask import request
+from flask import request, render_template
 from app import app
 from app.database import create, read, update, delete, scan
 from datetime import datetime
+from app.forms.product import ProductForm
 
 
 @app.route("/")
@@ -17,6 +18,10 @@ def index():
         "server_time": serv_time
     }
 
+@app.route("/product_form")
+def product_form():
+    form = ProductForm
+    return render_template("form_example.html", form=form)
 
 @app.route("/products")
 def get_all_products():
@@ -72,3 +77,7 @@ def square(number):
 def agent():
     user_agent = request.headers.get("User-Agent")
     return "<p>Your user agent is %s</p>" % user_agent
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
